@@ -144,6 +144,7 @@ Setelah ada alert sukses, pengguna perlu mengunggu selama 2 detik dan secara oto
 Jika pengguna menekan text "Buat Akun" pada halaman keempat, maka akan dialihkan ke halaman ketiga yaitu untuk membuat akun baru. Jika pengguna menekan teks kembali, maka akan dialihkan ke halaman kedua.
 
 [5] Halaman Home
+
 Halaman home berisi appbar, body dan di dalamnya terdapat bottom navigation bar yang berisi tombol atau icon yang bisa mengarahkan ke halaman lainnya. Namun untuk saat ini, icon-icon tersebut belum bisa digunakan untuk navigasi atau pindah halaman. List pengguna terdiri atas 25 list dan dapat discroll atau gulir. Appbar dan bottom navigation bar tidak akan ikut tergulir ketika list pengguna discroll.
 
 ![image](https://github.com/DwitabPutri/Pemrograman_Mobile-Tugas1/assets/114004174/0c011c3a-fabf-4c37-9fab-798d35fc3775)
