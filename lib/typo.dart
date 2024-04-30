@@ -19,6 +19,18 @@ TextStyle headerThree = GoogleFonts.poppins(
   fontWeight: FontWeight.w700,
 );
 
+TextStyle headerBig = GoogleFonts.poppins(
+  color: Color(0xFF1A1A1A),
+  fontSize: 22,
+  fontWeight: FontWeight.w700,
+);
+
+TextStyle headerMini = GoogleFonts.poppins(
+  color: Color(0xFF1A1A1A),
+  fontSize: 15,
+  fontWeight: FontWeight.w700,
+);
+
 TextStyle subheaderOne = GoogleFonts.poppins(
   color: Color(0xFF5D5D5D),
   fontSize: 9,
@@ -33,6 +45,12 @@ TextStyle penjelasanOne = GoogleFonts.poppins(
 
 TextStyle teksButtonOne = GoogleFonts.poppins(
   color: Color(0xFF1A1A1A),
+  fontSize: 12,
+  fontWeight: FontWeight.w500,
+);
+
+TextStyle teksButtonTwo = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 255, 255, 255),
   fontSize: 12,
   fontWeight: FontWeight.w500,
 );
@@ -66,6 +84,12 @@ TextStyle inputField = GoogleFonts.poppins(
   color: Color(0xFF1A1A1A),
   fontSize: 12,
   fontWeight: FontWeight.w400,
+);
+
+TextStyle tutup = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 96, 10, 137),
+  fontSize: 12,
+  fontWeight: FontWeight.w600,
 );
 
 TextStyle errorMsg = GoogleFonts.poppins(
@@ -102,4 +126,16 @@ TextStyle termsandCondition = GoogleFonts.poppins(
   color: Color(0xFF1A1A1A),
   fontSize: 8,
   fontWeight: FontWeight.w400,
+);
+
+TextStyle batal = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 255, 18, 18),
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+);
+
+TextStyle simpan = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 176, 1, 182),
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
 );

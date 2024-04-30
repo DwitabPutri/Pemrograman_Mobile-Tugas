@@ -13,10 +13,7 @@ class Page1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginRegister(),
-    );
+    return LoginRegister();
   }
 }
 
@@ -50,7 +47,7 @@ class LoginRegister extends StatelessWidget {
                 padding:
                     const EdgeInsets.only(top: 10.0, left: 45.0, right: 45.0),
                 child: Text(
-                  'Dapatkan pengalaman menyenangkan dalam mengatur keuanganmu dengan Finease di manapun dan kapanpun',
+                  'Dapatkan pengalaman menyenangkan dalam simpan pinjam dengan Finease di manapun dan kapanpun!',
                   textAlign: TextAlign.center,
                   style: penjelasanOne,
                 ),
@@ -58,17 +55,15 @@ class LoginRegister extends StatelessWidget {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Page2()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Color(0xFF131F20),
+                  backgroundColor: Color(0xFF131F20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        50.0),
+                    borderRadius: BorderRadius.circular(50.0),
                   ),
                   fixedSize: Size(320, 50),
                 ),
@@ -95,11 +90,9 @@ class LoginRegister extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(
-                      255, 241, 249, 255),
+                  backgroundColor: Color.fromARGB(255, 241, 249, 255),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        50.0),
+                    borderRadius: BorderRadius.circular(50.0),
                   ),
                   fixedSize: Size(320, 50),
                 ),
@@ -147,10 +140,7 @@ class LoginRegister extends StatelessWidget {
             left: 0,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainApp()),
-                );
+                Navigator.pushNamed(context, '/');
               },
               child: Padding(
                 padding: EdgeInsets.only(left: 20.0, top: 50.0),

@@ -7,8 +7,10 @@ environment:
   sdk: '>=3.3.2 <4.0.0'
 
 dependencies:
+  dio: ^5.4.3+1
   flutter:
     sdk: flutter
+  get_storage: ^2.1.1
   google_fonts: ^6.2.1
 
 dev_dependencies:
@@ -41,4 +43,11 @@ flutter:
     - assets/images/kartu.png
     - assets/images/kalender.png
     - assets/images/home.png
-
+    - assets/images/info.png
+    - assets/images/edit.png
+    - assets/images/trashbin.png
+    - assets/images/refresh.png
+    - assets/images/nofilluser.png
+    - assets/images/grafik.png
+    - assets/images/userabu.png
+    - assets/images/idcard.png

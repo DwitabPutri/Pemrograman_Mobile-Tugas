@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tgs1_progmob/page1.dart';
+import 'package:tgs1_progmob/main.dart';
 import 'package:tgs1_progmob/page2.dart';
 import 'package:tgs1_progmob/page4.dart';
 import 'package:tgs1_progmob/typo.dart';
+import 'package:dio/dio.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+GetStorage _storage = GetStorage();
+
+void main() async {
+  await GetStorage.init();
   runApp(const Page3());
 }
 
@@ -13,10 +19,7 @@ class Page3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
+    return HomeScreen();
   }
 }
 
@@ -32,23 +35,67 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _emailError = false;
   bool _passwordError = false;
 
-  void _validateEmail(String value) {
-    RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    RegExp phoneRegex = RegExp(r'^[0-9]+$');
+  Future<void> _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
-    bool isEmail = emailRegex.hasMatch(value);
-    bool isPhone = phoneRegex.hasMatch(value);
+    try {
+      Response response = await Dio().post(
+        'https://mobileapis.manpits.xyz/api/login',
+        data: {
+          'email': email,
+          'password': password,
+        },
+        options: Options(
+          contentType: 'application/x-www-form-urlencoded',
+        ),
+      );
 
-    setState(() {
-      _emailError = !(isEmail || isPhone);
-    });
-  }
+      print(response.data);
 
-  void _validatePassword(String value) {
-    bool isValid = value.length >= 1;
-    setState(() {
-      _passwordError = !isValid;
-    });
+      if (response.statusCode == 200) {
+        Navigator.pushNamed(context, '/home');
+        _storage.write('token', response.data['data']['token']);
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/images/cross.png',
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Gagal',
+                    style: headerThree,
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      'Gagal masuk. Harap periksa kembali email dan password Anda.',
+                      textAlign: TextAlign.center,
+                      style: inputField,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
   }
 
   @override
@@ -102,13 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               children: [
                                 Image.asset(
-                                  'assets/images/userBlack.png',
+                                  'assets/images/emaillogo.png',
                                   width: 20,
                                   height: 20,
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  'Akun',
+                                  'Email',
                                   style: judulTextField2,
                                 ),
                               ],
@@ -121,23 +168,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextField(
                                 controller: _emailController,
                                 style: inputField,
-                                onChanged: _validateEmail,
                                 decoration: InputDecoration(
-                                  hintText:
-                                      'Masukkan email atau nomor telepon',
+                                  hintText: 'Masukkan alamat email',
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0,
-                                left: 9.0),
+                            padding:
+                                const EdgeInsets.only(top: 10.0, left: 9.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -145,9 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: 20,
                                   height: 20,
                                 ),
-                                SizedBox(
-                                    height:
-                                        4),
+                                SizedBox(height: 4),
                                 Text('Password', style: judulTextField2),
                               ],
                             ),
@@ -155,8 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 9),
                           Expanded(
                             child: Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 20.0),
+                                padding: const EdgeInsets.only(right: 20.0),
                                 child: PasswordTextField(
                                   controller: _passwordController,
                                 )),
@@ -169,7 +209,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text('Email atau nomor telepon tidak valid',
                               style: errorMsg),
                         ),
-
                       SizedBox(height: 120),
                       Align(
                         alignment: Alignment.center,
@@ -177,8 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             if (_emailController.text.isNotEmpty &&
                                 _passwordController.text.isNotEmpty &&
-                                !_emailError &&
-                                !_passwordError) {
+                                _emailController.text.contains('@') &&
+                                _emailController.text.contains('.')) {
+                              _login();
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -192,9 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 80,
                                           ),
                                         ),
-                                        SizedBox(
-                                            height:
-                                                12),
+                                        SizedBox(height: 12),
                                         Text(
                                           'Sukses!',
                                           style: headerThree,
@@ -207,8 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Center(
                                           child: Text(
                                             'Terima kasih sudah kembali. Selamat menggunakan Finease!',
-                                            textAlign: TextAlign
-                                                .center,
+                                            textAlign: TextAlign.center,
                                             style: inputField,
                                           ),
                                         ),
@@ -218,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               );
                               Future.delayed(Duration(seconds: 2), () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Page4()),
@@ -238,9 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 80,
                                           ),
                                         ),
-                                        SizedBox(
-                                            height:
-                                                12),
+                                        SizedBox(height: 12),
                                         Text(
                                           'Gagal',
                                           style: headerThree,
@@ -253,8 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Center(
                                           child: Text(
                                             'Harap lengkapi dan periksa kembali datamu.',
-                                            textAlign: TextAlign
-                                                .center,
+                                            textAlign: TextAlign.center,
                                             style: inputField,
                                           ),
                                         ),
@@ -266,23 +300,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(
-                                0xFF131F20),
+                            backgroundColor: Color(0xFF131F20),
                             foregroundColor: Color(0xFFE9EBEB), // Warna teks
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  50.0),
+                              borderRadius: BorderRadius.circular(50.0),
                             ),
-                            fixedSize:
-                                Size(320, 50),
+                            fixedSize: Size(320, 50),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                    width: 8),
+                                SizedBox(width: 8),
                                 Text(
                                   'Masuk',
                                   style: teksButtonOne.copyWith(
@@ -293,7 +323,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 20.0, left: 45.0, right: 45.0),
@@ -305,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: penjelasanOne),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Page2()),
@@ -326,10 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: 0,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page1()),
-                      );
+                      Navigator.pushNamed(context, '/utama');
                     },
                     child: Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 50.0),
