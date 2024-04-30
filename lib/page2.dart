@@ -68,10 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-      // Handle response here
       print(response.data);
     } catch (error) {
-      // Handle error here
       print('Error: $error');
     }
   }
