@@ -4,6 +4,7 @@ import 'package:tgs1_progmob/page4.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 
 GetStorage _storage = GetStorage();
 
@@ -32,15 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _nomor_indukController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _alamatController = TextEditingController();
-  TextEditingController _tanggalController = TextEditingController();
+  //TextEditingController _tanggalController = TextEditingController();
   TextEditingController _teleponController = TextEditingController();
   TextEditingController _imageController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   Future<void> _register() async {
     String nomor_induk = _nomor_indukController.text;
     String name = _nameController.text;
     String alamat = _alamatController.text;
-    String tanggal = _tanggalController.text;
+    String tanggal = DateFormat('yyyy-MM-dd').format(_selectedDate);
     String telepon = _teleponController.text;
     //String image = _imageController.text;
 
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     storage.write('nomor_induk', _nomor_indukController.text);
     storage.write('nama', _nameController.text);
     storage.write('alamat', _alamatController.text);
-    storage.write('tgl_lahir', _tanggalController.text);
+    storage.write('tgl_lahir', DateFormat('yyyy-MM-dd').format(_selectedDate));
     storage.write('telepon', _teleponController.text);
     storage.write('image_url', _imageController.text);
   }
@@ -246,13 +248,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           SizedBox(width: 17),
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: TextField(
-                                controller: _tanggalController,
-                                style: inputField,
-                                decoration: InputDecoration(
-                                  hintText: 'Tahun-bulan-tanggal',
+                            child: InkWell(
+                              onTap: () {
+                                _selectDate(
+                                    context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Text(
+                                  DateFormat('dd MMMM yyyy').format(
+                                      _selectedDate),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
                             ),
@@ -472,5 +483,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+      });
   }
 }

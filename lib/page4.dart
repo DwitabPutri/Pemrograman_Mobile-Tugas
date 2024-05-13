@@ -4,6 +4,7 @@ import 'package:tgs1_progmob/page5.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 GetStorage _storage = GetStorage();
 
@@ -217,8 +218,7 @@ class Homepage extends StatelessWidget {
                           children: [
                             Icon(Icons.add, color: Colors.white),
                             SizedBox(width: 8),
-                            Text('Tambah Anggota',
-                                style: teksButtonTwo),
+                            Text('Tambah Anggota', style: teksButtonTwo),
                           ],
                         ),
                       ),
@@ -243,8 +243,7 @@ class Homepage extends StatelessWidget {
                           children: [
                             Icon(Icons.logout, color: Colors.white),
                             SizedBox(width: 8),
-                            Text('Logout',
-                                style: teksButtonTwo),
+                            Text('Logout', style: teksButtonTwo),
                           ],
                         ),
                       ),
@@ -346,14 +345,43 @@ class Homepage extends StatelessWidget {
   }
 }
 
-class AnggotaList extends StatelessWidget {
+class AnggotaList extends StatefulWidget {
+  final List<dynamic> anggotaList;
+
+  const AnggotaList({Key? key, required this.anggotaList}) : super(key: key);
+
+  @override
+  _AnggotaListState createState() => _AnggotaListState();
+}
+
+class _AnggotaListState extends State<AnggotaList> {
+  TextEditingController _tanggalLahirController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+    _tanggalLahirController.text =
+        DateFormat('yyyy-MM-dd').format(_selectedDate);
+  }
+
   void _navigateBack(BuildContext context) {
     Navigator.pop(context);
   }
 
-  final List<dynamic> anggotaList;
-
-  const AnggotaList({Key? key, required this.anggotaList}) : super(key: key);
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null && pickedDate != _selectedDate)
+      setState(() {
+        _selectedDate = pickedDate;
+        _tanggalLahirController.text =
+            DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -412,9 +440,9 @@ class AnggotaList extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-        itemCount: anggotaList.length,
+        itemCount: widget.anggotaList.length,
         itemBuilder: (context, index) {
-          var anggota = anggotaList[index];
+          var anggota = widget.anggotaList[index];
           return ListTile(
             leading: anggota['image_url'] != null
                 ? CircleAvatar(
@@ -478,16 +506,16 @@ class AnggotaList extends StatelessWidget {
       if (response.statusCode == 200) {
         var anggotaData = response.data['data']['anggota'];
 
-        // Menampilkan AlertDialog untuk mengedit data anggota
         showDialog(
           context: context,
           builder: (BuildContext context) {
             String nomorInduk = anggotaData['nomor_induk'].toString();
             String nama = anggotaData['nama'].toString();
             String alamat = anggotaData['alamat'].toString();
-            String tanggalLahir = anggotaData['tgl_lahir'].toString();
+            //String tanggalLahir = anggotaData['tgl_lahir'].toString();
             String telepon = anggotaData['telepon'].toString();
-
+            String tanggalLahir = anggotaData['tgl_lahir'].toString();
+            _selectedDate = DateTime.parse(tanggalLahir);
             return AlertDialog(
               title: Text(
                 'Edit Anggota',
@@ -523,13 +551,18 @@ class AnggotaList extends StatelessWidget {
                           labelText: 'Alamat', hintStyle: penjelasanSearch),
                     ),
                     TextFormField(
-                      initialValue: tanggalLahir,
-                      onChanged: (value) {
-                        tanggalLahir = value;
+                      controller: _tanggalLahirController,
+                      readOnly: true,
+                      onTap: () {
+                        _selectDate(
+                            context);
                       },
                       decoration: InputDecoration(
-                          labelText: 'Tanggal Lahir',
-                          hintStyle: penjelasanSearch),
+                        labelText: 'Tanggal Lahir',
+                        hintStyle: penjelasanSearch,
+                        suffixIcon: Icon(Icons
+                            .calendar_today), 
+                      ),
                     ),
                     TextFormField(
                       initialValue: telepon,
