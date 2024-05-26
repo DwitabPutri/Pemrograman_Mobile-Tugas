@@ -31,6 +31,18 @@ TextStyle headerMini = GoogleFonts.poppins(
   fontWeight: FontWeight.w700,
 );
 
+TextStyle headerMed = GoogleFonts.poppins(
+  color: Color(0xFF1A1A1A),
+  fontSize: 15,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle headerXMed = GoogleFonts.poppins(
+  color: Color(0xFF1A1A1A),
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+);
+
 TextStyle subheaderOne = GoogleFonts.poppins(
   color: Color(0xFF5D5D5D),
   fontSize: 9,
@@ -51,6 +63,12 @@ TextStyle teksButtonOne = GoogleFonts.poppins(
 
 TextStyle teksButtonTwo = GoogleFonts.poppins(
   color: Color.fromARGB(255, 255, 255, 255),
+  fontSize: 12,
+  fontWeight: FontWeight.w500,
+);
+
+TextStyle teksButtonTwoBlck = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 8, 1, 50),
   fontSize: 12,
   fontWeight: FontWeight.w500,
 );

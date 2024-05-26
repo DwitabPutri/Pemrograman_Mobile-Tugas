@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tgs1_progmob/page1.dart';
 import 'package:tgs1_progmob/page5.dart';
-import 'package:tgs1_progmob/page6.dart';
+import 'package:tgs1_progmob/page4.dart';
+import 'package:tgs1_progmob/page61.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,11 +12,11 @@ GetStorage _storage = GetStorage();
 
 void main() {
   GetStorage _storage = GetStorage();
-  runApp(const Page4());
+  runApp(const Page6());
 }
 
-class Page4 extends StatelessWidget {
-  const Page4({Key? key}) : super(key: key);
+class Page6 extends StatelessWidget {
+  const Page6({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,10 +27,10 @@ class Page4 extends StatelessWidget {
 }
 
 class Homepage extends StatelessWidget {
-  void goLogout(BuildContext context) async {
+  void getJenisTransaksi(BuildContext context) async {
     try {
       final _response = await Dio().get(
-        'https://mobileapis.manpits.xyz/api/logout',
+        'https://mobileapis.manpits.xyz/api/jenistransaksi',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
@@ -38,53 +39,35 @@ class Homepage extends StatelessWidget {
       print(_response.data);
 
       if (_response.statusCode == 200) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Page1()),
-        );
-      }
-    } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
+        final jenisTransaksi = _response.data['data']['jenistransaksi'];
 
-  void _getUserDetails(BuildContext context) async {
-    try {
-      final _response = await Dio().get(
-        'https://mobileapis.manpits.xyz/api/user',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-      );
+        List<Widget> transactionWidgets = [];
 
-      print(_response.data);
-
-      if (_response.statusCode == 200) {
-        final userData = _response.data['data']['user'];
+        for (var transaction in jenisTransaksi) {
+          transactionWidgets.add(
+            ListTile(
+              title: Text(transaction['trx_name'], style: inputField),
+              subtitle: Text('ID: ${transaction['id']}', style: inputField),
+              trailing: Text('Multiplier: ${transaction['trx_multiply']}',
+                  style: inputField),
+            ),
+          );
+        }
 
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                'Detail Pengguna',
+                'Jenis Transaksi',
                 style: headerThree,
               ),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Nama: ${userData['name']}',
-                    style: inputField,
-                  ),
-                  Text(
-                    'Email: ${userData['email']}',
-                    style: inputField,
-                  ),
-                ],
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: transactionWidgets,
+                ),
               ),
               actions: <Widget>[
                 TextButton(
@@ -164,17 +147,6 @@ class Homepage extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            GestureDetector(
-              onTap: () {
-                _getUserDetails(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/fotodiri.jpeg'),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -185,13 +157,13 @@ class Homepage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Halo!',
+                'Transaksi Anggota',
                 textAlign: TextAlign.left,
                 style: headerBig,
               ),
               SizedBox(height: 8),
               Text(
-                'Bagaimana kondisi keuanganmu belakangan ini? Jika ada masalah, selesaikan dengan Finease, ya!',
+                'Tambah dan lihat transaksi yang dilakukan oleh anggota di sini!',
                 textAlign: TextAlign.left,
                 style: penjelasanHome,
               ),
@@ -201,10 +173,7 @@ class Homepage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Page5()),
-                        );
+                        _getAnggotaDetails(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -219,7 +188,7 @@ class Homepage extends StatelessWidget {
                           children: [
                             Icon(Icons.add, color: Colors.white),
                             SizedBox(width: 8),
-                            Text('Tambah Anggota', style: teksButtonTwo),
+                            Text('Tambah Transaksi', style: teksButtonTwo),
                           ],
                         ),
                       ),
@@ -229,10 +198,10 @@ class Homepage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        goLogout(context);
+                        getJenisTransaksi(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF131F20),
+                        backgroundColor: Color.fromARGB(255, 152, 216, 222),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
@@ -242,9 +211,9 @@ class Homepage extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.logout, color: Colors.white),
+                            Icon(Icons.money, color: Color.fromARGB(255, 8, 1, 50)),
                             SizedBox(width: 8),
-                            Text('Logout', style: teksButtonTwo),
+                            Text('Jenis Transaksi', style: teksButtonTwoBlck),
                           ],
                         ),
                       ),
@@ -291,11 +260,16 @@ class Homepage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Page4()),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/home.png', width: 21, height: 21),
+                  Image.asset('assets/images/homeline.png', width: 21, height: 21),
                   SizedBox(height: 4),
                   Text('Beranda', style: labelNavbar),
                 ],
@@ -303,7 +277,7 @@ class Homepage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                _getAnggotaDetails(context);
+                //_getAnggotaDetails(context);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -316,16 +290,11 @@ class Homepage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Page6()),
-                );
-              },
+              onTap: () {},
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/kartu.png', width: 21, height: 21),
+                  Image.asset('assets/images/cardblack.png', width: 21, height: 21),
                   SizedBox(height: 4),
                   Text('Transaksi', style: labelNavbar),
                 ],
@@ -439,7 +408,7 @@ class _AnggotaListState extends State<AnggotaList> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Page4()),
+              MaterialPageRoute(builder: (context) => Page6()),
             );
           },
         ),
@@ -479,16 +448,15 @@ class _AnggotaListState extends State<AnggotaList> {
                 ),
                 IconButton(
                   onPressed: () {
-                    _editAnggotaDetails(context, anggota['id']);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TransactionDetailPage(memberId: anggota['id']),
+                      ),
+                    );
                   },
-                  icon: Image.asset('assets/images/edit.png',
-                      width: 24, height: 24),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _deleteAnggota(context, anggota['id']);
-                  },
-                  icon: Image.asset('assets/images/trashbin.png',
+                  icon: Image.asset('assets/images/kartu.png',
                       width: 24, height: 24),
                 ),
               ],
@@ -499,81 +467,58 @@ class _AnggotaListState extends State<AnggotaList> {
     );
   }
 
-  void _editAnggotaDetails(BuildContext context, int anggotaId) async {
+  void addTransaction(BuildContext context, int anggotaId) async {
     try {
       Response response = await Dio().get(
-        'https://mobileapis.manpits.xyz/api/anggota/$anggotaId',
+        'https://mobileapis.manpits.xyz/api/jenistransaksi',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+          contentType: 'application/x-www-form-urlencoded',
         ),
       );
 
       if (response.statusCode == 200) {
-        var anggotaData = response.data['data']['anggota'];
+        List<Map<String, dynamic>> jenistransaksi =
+            List<Map<String, dynamic>>.from(
+                response.data['data']['jenistransaksi']);
 
-        showDialog(
+        int selectedTransactionIndex = 0;
+        TextEditingController nominalController = TextEditingController();
+
+        await showDialog(
           context: context,
           builder: (BuildContext context) {
-            String nomorInduk = anggotaData['nomor_induk'].toString();
-            String nama = anggotaData['nama'].toString();
-            String alamat = anggotaData['alamat'].toString();
-            //String tanggalLahir = anggotaData['tgl_lahir'].toString();
-            String telepon = anggotaData['telepon'].toString();
-            String tanggalLahir = anggotaData['tgl_lahir'].toString();
-            _selectedDate = DateTime.parse(tanggalLahir);
             return AlertDialog(
-              title: Text(
-                'Edit Anggota',
-                style: headerOne,
-              ),
+              title: Text('Tambah Transaksi'),
               content: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    TextFormField(
-                      initialValue: nomorInduk,
-                      onChanged: (value) {
-                        nomorInduk = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Nomor Induk',
-                          hintStyle: penjelasanSearch),
-                    ),
-                    TextFormField(
-                      initialValue: nama,
-                      onChanged: (value) {
-                        nama = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Nama', hintStyle: penjelasanSearch),
-                    ),
-                    TextFormField(
-                      initialValue: alamat,
-                      onChanged: (value) {
-                        alamat = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Alamat', hintStyle: penjelasanSearch),
-                    ),
-                    TextFormField(
-                      controller: _tanggalLahirController,
-                      readOnly: true,
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Tanggal Lahir',
-                        hintStyle: penjelasanSearch,
-                        suffixIcon: Icon(Icons.calendar_today),
+                    DropdownButtonFormField<int>(
+                      value: selectedTransactionIndex,
+                      items: List.generate(
+                        jenistransaksi.length,
+                        (index) => DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(
+                            jenistransaksi[index]['trx_name'],
+                            style: inputField,
+                          ),
+                        ),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedTransactionIndex = value!;
+                        });
+                      },
                     ),
                     TextFormField(
-                      initialValue: telepon,
-                      onChanged: (value) {
-                        telepon = value;
-                      },
+                      controller: nominalController,
+                      style: inputField,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          labelText: 'Telepon', hintStyle: penjelasanSearch),
+                        labelText: 'Nominal',
+                      ),
                     ),
                   ],
                 ),
@@ -588,14 +533,13 @@ class _AnggotaListState extends State<AnggotaList> {
                 TextButton(
                   onPressed: () async {
                     try {
-                      Response putResponse = await Dio().put(
-                        'https://mobileapis.manpits.xyz/api/anggota/$anggotaId',
+                      Response postResponse = await Dio().post(
+                        'https://mobileapis.manpits.xyz/api/tabungan',
                         data: {
-                          'nomor_induk': nomorInduk,
-                          'nama': nama,
-                          'alamat': alamat,
-                          'tgl_lahir': tanggalLahir,
-                          'telepon': telepon,
+                          'anggota_id': anggotaId,
+                          'trx_id': jenistransaksi[selectedTransactionIndex]
+                              ['id'],
+                          'trx_nominal': double.parse(nominalController.text),
                         },
                         options: Options(
                           headers: {
@@ -604,29 +548,39 @@ class _AnggotaListState extends State<AnggotaList> {
                         ),
                       );
 
-                      if (putResponse.statusCode == 200) {
-                        print('Data anggota berhasil diupdate');
+                      if (postResponse.statusCode == 200) {
+                        print('Transaksi berhasil ditambahkan');
+                        print(
+                            'Detail Transaksi Baru: ${postResponse.data['data']['tabungan']}');
                       } else {
-                        print('Gagal mengupdate data anggota');
+                        print('Gagal menambahkan transaksi');
                       }
                     } catch (error) {
                       print('Error: $error');
                     }
                     Navigator.of(context).pop();
                   },
-                  child: Text(
-                    'Simpan',
-                    style: simpan,
-                  ),
+                  child: Text('Simpan', style: simpan),
                 ),
               ],
             );
           },
         );
+      } else {
+        print('Gagal memuat jenis transaksi.');
       }
     } catch (error) {
       print('Error: $error');
     }
+  }
+
+  void _saveUserData(int anggotaId, int trxId, double trxNominal) {
+    final storage = GetStorage();
+
+    // Tulis data pengguna yang diperbarui
+    storage.write('anggota_id', anggotaId);
+    storage.write('trx_id', trxId);
+    storage.write('trx_nominal', trxNominal);
   }
 
   void _showAnggotaDetails(BuildContext context, int anggotaId) async {
@@ -681,27 +635,6 @@ class _AnggotaListState extends State<AnggotaList> {
           },
         );
       }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
-
-  void _deleteAnggota(BuildContext context, int anggotaId) async {
-    try {
-      final _response = await Dio().delete(
-        'https://mobileapis.manpits.xyz/api/anggota/$anggotaId',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-      );
-
-      print(_response.data);
-
-      if (_response.statusCode == 200) {
-        print('Anggota berhasil dihapus');
-      }
-    } on DioException catch (e) {
-      print('Dio error: $e');
     } catch (error) {
       print('Error: $error');
     }
