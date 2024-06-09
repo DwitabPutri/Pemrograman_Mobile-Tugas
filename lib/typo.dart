@@ -110,6 +110,12 @@ TextStyle tutup = GoogleFonts.poppins(
   fontWeight: FontWeight.w600,
 );
 
+TextStyle tutupmerah = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 255, 18, 18),
+  fontSize: 12,
+  fontWeight: FontWeight.w600,
+);
+
 TextStyle errorMsg = GoogleFonts.poppins(
   color: Color.fromARGB(255, 255, 18, 18),
   fontSize: 11,

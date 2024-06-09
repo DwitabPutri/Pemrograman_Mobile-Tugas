@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tgs1_progmob/page1.dart';
 import 'package:tgs1_progmob/page5.dart';
 import 'package:tgs1_progmob/page6.dart';
+import 'package:tgs1_progmob/page61.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
@@ -89,6 +90,12 @@ class Homepage extends StatelessWidget {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
+                    goLogout(context);
+                  },
+                  child: Text('Logout', style: tutupmerah),
+                ),
+                TextButton(
+                  onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text('Tutup', style: tutup),
@@ -169,7 +176,7 @@ class Homepage extends StatelessWidget {
                 _getUserDetails(context);
               },
               child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
+                padding: const EdgeInsets.only(right: 3.0),
                 child: CircleAvatar(
                   backgroundImage: AssetImage('assets/images/fotodiri.jpeg'),
                 ),
@@ -195,7 +202,7 @@ class Homepage extends StatelessWidget {
                 textAlign: TextAlign.left,
                 style: penjelasanHome,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               Row(
                 children: [
                   Expanded(
@@ -225,34 +232,9 @@ class Homepage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        goLogout(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF131F20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.logout, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Logout', style: teksButtonTwo),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 35),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -316,18 +298,13 @@ class Homepage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Page6()),
-                );
-              },
+              onTap: () {},
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset('assets/images/kartu.png', width: 21, height: 21),
                   SizedBox(height: 4),
-                  Text('Transaksi', style: labelNavbar),
+                  Text('Keuangan', style: labelNavbar),
                 ],
               ),
             ),
@@ -462,36 +439,45 @@ class _AnggotaListState extends State<AnggotaList> {
               children: [
                 Text('Nomor Induk: ${anggota['nomor_induk']}',
                     style: inputField),
-                Text('Telepon: ${anggota['telepon']}', style: inputField),
+                //Text('Telepon: ${anggota['telepon']}', style: inputField),
                 Text('Status Aktif: ${anggota['status_aktif']}',
                     style: inputField),
               ],
             ),
-            trailing: Wrap(
-              spacing: 8,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    _showAnggotaDetails(context, anggota['id']);
-                  },
-                  icon: Image.asset('assets/images/info.png',
-                      width: 24, height: 24),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _editAnggotaDetails(context, anggota['id']);
-                  },
-                  icon: Image.asset('assets/images/edit.png',
-                      width: 24, height: 24),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _deleteAnggota(context, anggota['id']);
-                  },
-                  icon: Image.asset('assets/images/trashbin.png',
-                      width: 24, height: 24),
-                ),
-              ],
+            trailing: Padding(
+              padding: const EdgeInsets.only(right: 3.0),
+              child: Row(
+                mainAxisSize:
+                    MainAxisSize.min, // Ensure the Row takes minimum width
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TransactionDetailPage(memberId: anggota['id']),
+                        ),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/images/info.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _deleteAnggota(context, anggota['id']);
+                    },
+                    icon: Image.asset(
+                      'assets/images/trashbin.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
