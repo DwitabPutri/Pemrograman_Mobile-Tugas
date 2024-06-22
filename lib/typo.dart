@@ -98,6 +98,12 @@ TextStyle judulTextField2 = GoogleFonts.poppins(
   fontWeight: FontWeight.w500,
 );
 
+TextStyle judulTextField3 = GoogleFonts.poppins(
+  color: Color(0xFF1A1A1A),
+  fontSize: 13,
+  fontWeight: FontWeight.w400,
+);
+
 TextStyle inputField = GoogleFonts.poppins(
   color: Color(0xFF1A1A1A),
   fontSize: 12,

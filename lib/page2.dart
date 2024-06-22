@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 18.0),
+                                const EdgeInsets.only(top: 10.0, left: 20.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 17),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
                               child: TextField(
                                 controller: _emailController,
                                 style: inputField,
@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 9.0),
+                                const EdgeInsets.only(top: 10.0, left: 11.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 9),
                           Expanded(
                             child: Padding(
-                                padding: const EdgeInsets.only(right: 20.0),
+                                padding: const EdgeInsets.only(left: 10.0, right: 20.0),
                                 child: PasswordTextField(
                                   controller: _passwordController,
                                 )),
@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 7.0),
+                                const EdgeInsets.only(top: 10.0, left: 8.0),
                             child: Column(
                               children: [
                                 Padding(
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 7),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
                               child: TextField(
                                 controller: _confirmPasswordController,
                                 style: inputField,

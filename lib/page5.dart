@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 18.0),
+                                const EdgeInsets.only(top: 10.0, left: 12.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 26.0),
+                                const EdgeInsets.only(top: 10.0, left: 17.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -179,7 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 17),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding:
+                                  const EdgeInsets.only(left: 7.0, right: 20.0),
                               child: TextField(
                                 controller: _nameController,
                                 style: inputField,
@@ -195,11 +196,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 23.0),
+                                const EdgeInsets.only(top: 10.0, left: 15.0),
                             child: Column(
                               children: [
                                 Image.asset(
-                                  'assets/images/home.png',
+                                  'assets/images/homeline.png',
                                   width: 20,
                                   height: 20,
                                 ),
@@ -214,7 +215,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 17),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding:
+                                  const EdgeInsets.only(left: 5.0, right: 20.0),
                               child: TextField(
                                 controller: _alamatController,
                                 style: inputField,
@@ -230,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 18.0),
+                                const EdgeInsets.only(top: 10.0, left: 13.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -250,20 +252,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                _selectDate(
-                                    context);
+                                _selectDate(context);
                               },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Text(
-                                  DateFormat('dd MMMM yyyy').format(
-                                      _selectedDate),
-                                  style: TextStyle(fontSize: 16),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 3.0, right: 20.0),
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          color: Color.fromARGB(255, 0, 0, 0),
+                                          width: 0.3),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    DateFormat('dd MMMM yyyy')
+                                        .format(_selectedDate),
+                                    style: judulTextField3,
+                                  ),
                                 ),
                               ),
                             ),
@@ -274,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 10.0, left: 18.0),
+                                const EdgeInsets.only(top: 10.0, left: 13.0),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -293,19 +300,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 17),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding:
+                                  const EdgeInsets.only(left: 4.0, right: 20.0),
                               child: TextField(
                                 controller: _teleponController,
                                 style: inputField,
                                 decoration: InputDecoration(
-                                  hintText: 'Masukkan nomor',
+                                  hintText: 'Masukkan nomor telepon',
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 17),
+                      SizedBox(height: 30),
                       Align(
                         alignment: Alignment.center,
                         child: ElevatedButton(

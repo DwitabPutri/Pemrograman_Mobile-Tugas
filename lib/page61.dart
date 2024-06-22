@@ -64,10 +64,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             String nomorInduk = anggotaData['nomor_induk'].toString();
             String nama = anggotaData['nama'].toString();
             String alamat = anggotaData['alamat'].toString();
-            //String tanggalLahir = anggotaData['tgl_lahir'].toString();
             String telepon = anggotaData['telepon'].toString();
             String tanggalLahir = anggotaData['tgl_lahir'].toString();
+            String statusAktif = anggotaData['status_aktif'].toString();
             _selectedDate = DateTime.parse(tanggalLahir);
+
             return AlertDialog(
               title: Text(
                 'Edit Anggota',
@@ -122,6 +123,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       decoration: InputDecoration(
                           labelText: 'Telepon', hintStyle: penjelasanSearch),
                     ),
+                    TextFormField(
+                      initialValue: statusAktif,
+                      onChanged: (value) {
+                        statusAktif = value;
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Status Aktif',
+                          hintStyle: penjelasanSearch),
+                    ),
                   ],
                 ),
               ),
@@ -134,6 +144,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
                 TextButton(
                   onPressed: () async {
+                    if (statusAktif != '0' && statusAktif != '1') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Status harus 0 atau 1.')),
+                      );
+                      return;
+                    }
+
                     try {
                       Response putResponse = await Dio().put(
                         'https://mobileapis.manpits.xyz/api/anggota/$anggotaId',
@@ -143,6 +160,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           'alamat': alamat,
                           'tgl_lahir': tanggalLahir,
                           'telepon': telepon,
+                          'status_aktif': statusAktif,
                         },
                         options: Options(
                           headers: {
@@ -248,6 +266,17 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
   void addTransaction(BuildContext context, int anggotaId) async {
     try {
+      final anggotaData = await _fetchAnggotaDetails(anggotaId);
+
+      if (anggotaData['status_aktif'] != 1) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Anggota tidak aktif, tidak dapat membuat transaksi.')),
+        );
+        return;
+      }
+
       final response = await Dio().get(
         'https://mobileapis.manpits.xyz/api/jenistransaksi',
         options: Options(
@@ -409,7 +438,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintStyle: penjelasanSearch,
                       hintText: 'Cari pengguna, layanan, inf....',
                       border: InputBorder.none,
                       prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -418,13 +447,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: 10),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                addTransaction(context, widget.memberId);
-              },
             ),
             SizedBox(width: 10),
             IconButton(
@@ -466,15 +488,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 ? CircleAvatar(
                                     backgroundImage:
                                         NetworkImage(userData['image_url']),
-                                    radius: 50, // Adjust the radius as needed
+                                    radius: 50,
                                   )
                                 : CircleAvatar(
                                     backgroundImage:
-                                        AssetImage('assets/images/userabu.png'),
-                                    radius: 50, // Adjust the radius as needed
+                                        AssetImage('assets/images/ponyo.jpg'),
+                                    radius: 50,
                                   ),
-                            SizedBox(
-                                height: 16), // Space between avatar and text
+                            SizedBox(height: 16),
                             Text('Nama: ${userData['nama']}',
                                 style: inputField),
                             Text('Nomor Induk: ${userData['nomor_induk']}',
@@ -485,9 +506,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 style: inputField),
                             Text('Telepon: ${userData['telepon']}',
                                 style: inputField),
-                            SizedBox(
-                                height:
-                                    16),
+                            Text('Status Aktif: ${userData['status_aktif']}',
+                                style: inputField),
+                            SizedBox(height: 16),
                             if (userData['image_url'] != null)
                               Image.network(userData['image_url']),
                           ],
@@ -555,10 +576,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         );
                       },
                     )
-                  : Center(child: CircularProgressIndicator()),
+                  : Center(child: Text('Tidak ada transaksi', style: tutup)),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => addTransaction(context, widget.memberId),
+        child: Icon(Icons.add),
       ),
     );
   }

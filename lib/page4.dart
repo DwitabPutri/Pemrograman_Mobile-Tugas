@@ -298,13 +298,18 @@ class Homepage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Page6()),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset('assets/images/kartu.png', width: 21, height: 21),
                   SizedBox(height: 4),
-                  Text('Keuangan', style: labelNavbar),
+                  Text('Bunga', style: labelNavbar),
                 ],
               ),
             ),
@@ -431,9 +436,9 @@ class _AnggotaListState extends State<AnggotaList> {
                     backgroundImage: NetworkImage(anggota['image_url']),
                   )
                 : CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/userabu.png'),
+                    backgroundImage: AssetImage('assets/images/ponyo.jpg'),
                   ),
-            title: Text('${anggota['nama']}', style: headerOne),
+            title: Text('${anggota['nama']}', style: headerMini),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
