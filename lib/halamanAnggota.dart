@@ -228,7 +228,7 @@ class _AnggotaListState extends State<AnggotaList> {
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: inactiveAnggota.length,
-                                itemBuilder: (context, index) {
+                                itemBuilder: (context, index){
                                   var anggota = inactiveAnggota[index];
                                   if (anggota != null) {
                                     return ListTile(
@@ -251,9 +251,6 @@ class _AnggotaListState extends State<AnggotaList> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                              'Nomor Induk: ${anggota['nomor_induk']}',
-                                              style: inputField),
                                           Text(
                                               'Status: ${anggota['status_aktif'] == 1 ? "Aktif" : "Tidak Aktif"}',
                                               style: inputField),
