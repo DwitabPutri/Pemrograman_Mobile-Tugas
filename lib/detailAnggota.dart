@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tgs1_progmob/typo.dart';
+import 'package:tgs1_progmob/halamanAnggota.dart';
 import 'package:intl/intl.dart';
 
 GetStorage _storage = GetStorage();
 
-class TransactionDetailPage extends StatefulWidget {
+class detailPengguna extends StatefulWidget {
   final int memberId;
 
-  const TransactionDetailPage({Key? key, required this.memberId})
-      : super(key: key);
+  const detailPengguna({Key? key, required this.memberId}) : super(key: key);
 
   @override
-  _TransactionDetailPageState createState() => _TransactionDetailPageState();
+  _detailPenggunaState createState() => _detailPenggunaState();
 }
 
-class _TransactionDetailPageState extends State<TransactionDetailPage> {
+class _detailPenggunaState extends State<detailPengguna> {
   List<Map<String, dynamic>> _transactions = [];
   Map<int, String> _jenisTransaksiMap = {};
   TextEditingController _tanggalLahirController = TextEditingController();
@@ -31,19 +31,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         DateFormat('yyyy-MM-dd').format(_selectedDate);
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
+  Future<DateTime?> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    if (pickedDate != null && pickedDate != _selectedDate)
-      setState(() {
-        _selectedDate = pickedDate;
-        _tanggalLahirController.text =
-            DateFormat('yyyy-MM-dd').format(pickedDate);
-      });
+    return picked;
   }
 
   void _editAnggotaDetails(BuildContext context, int anggotaId) async {
@@ -68,6 +63,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             String tanggalLahir = anggotaData['tgl_lahir'].toString();
             String statusAktif = anggotaData['status_aktif'].toString();
             _selectedDate = DateTime.parse(tanggalLahir);
+            _tanggalLahirController.text =
+                DateFormat('yyyy-MM-dd').format(_selectedDate);
 
             return AlertDialog(
               title: Text(
@@ -106,8 +103,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     TextFormField(
                       controller: _tanggalLahirController,
                       readOnly: true,
-                      onTap: () {
-                        _selectDate(context);
+                      onTap: () async {
+                        DateTime? pickedDate = await _selectDate(context);
+                        if (pickedDate != null) {
+                          _selectedDate = pickedDate;
+                          _tanggalLahirController.text =
+                              DateFormat('yyyy-MM-dd').format(_selectedDate);
+                          tanggalLahir = _tanggalLahirController.text;
+                        }
                       },
                       decoration: InputDecoration(
                         labelText: 'Tanggal Lahir',
@@ -229,36 +232,17 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       );
 
       if (response.statusCode == 200) {
+        final transactions =
+            List<Map<String, dynamic>>.from(response.data['data']['tabungan']);
+
         setState(() {
-          _transactions = List<Map<String, dynamic>>.from(
-              response.data['data']['tabungan']);
-          print(response.data['data']['tabungan']);
+          _transactions = transactions;
         });
+
+        print('Transactions: $_transactions');
       } else {
         print('Failed to load transactions');
       }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
-
-  void _DeleteTransaction(BuildContext context, int anggotaId) async {
-    try {
-      final _response = await Dio().delete(
-        'https://mobileapis.manpits.xyz/api/tabungan/$anggotaId',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-      );
-
-      print(_response.data);
-
-      if (_response.statusCode == 200) {
-        print('Tabungan Berhasil Dihapus');
-        _fetchTransactions();
-      }
-    } on DioException catch (e) {
-      print('Dio error: $e');
     } catch (error) {
       print('Error: $error');
     }
@@ -424,31 +408,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 3.0),
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintStyle: penjelasanSearch,
-                      hintText: 'Cari pengguna, layanan, inf....',
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.search, color: Colors.grey),
-                      contentPadding: EdgeInsets.only(bottom: 19.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
@@ -462,6 +426,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               },
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AnggotaList()),
+            );
+          },
         ),
       ),
       body: Padding(
@@ -506,7 +479,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 style: inputField),
                             Text('Telepon: ${userData['telepon']}',
                                 style: inputField),
-                            Text('Status Aktif: ${userData['status_aktif']}',
+                            Text(
+                                'Status Aktif: ${userData['status_aktif'] == '1' ? 'Aktif' : 'Tidak Aktif'}',
                                 style: inputField),
                             SizedBox(height: 16),
                             if (userData['image_url'] != null)
@@ -543,7 +517,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 } else if (snapshot.hasData) {
                   final saldo = snapshot.data!;
                   return Text(
-                    'Saldo Tabunganmu: Rp. $saldo',
+                    'Saldo Tabunganmu: $saldo',
                     style: tutup,
                   );
                 } else {

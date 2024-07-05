@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tgs1_progmob/page1.dart';
-import 'package:tgs1_progmob/page3.dart';
-import 'package:tgs1_progmob/page4.dart';
-import 'package:tgs1_progmob/main.dart';
+import 'package:tgs1_progmob/masukAkun.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart';
 
 void main() {
-  runApp(const Page2());
+  runApp(const buatAkun());
 }
 
-class Page2 extends StatelessWidget {
-  const Page2({Key? key}) : super(key: key);
+class buatAkun extends StatelessWidget {
+  const buatAkun({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -357,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Page3()),
+                                          builder: (context) => masukAkun()),
                                     );
                                   });
                                 } catch (error) {
@@ -510,7 +507,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Page3()),
+                                      builder: (context) => masukAkun()),
                                 );
                               },
                               child: Text('Masuk',

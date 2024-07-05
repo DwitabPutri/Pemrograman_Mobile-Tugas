@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tgs1_progmob/page3.dart';
-import 'package:tgs1_progmob/page4.dart';
+import 'package:tgs1_progmob/homepage.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart';
@@ -9,11 +8,11 @@ import 'package:intl/intl.dart';
 GetStorage _storage = GetStorage();
 
 void main() {
-  runApp(const Page5());
+  runApp(const tambahAnggota());
 }
 
-class Page5 extends StatelessWidget {
-  const Page5({Key? key}) : super(key: key);
+class tambahAnggota extends StatelessWidget {
+  const tambahAnggota({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Page4()),
+                                          builder: (context) => homepage()),
                                     );
                                   });
                                 } catch (error) {
@@ -476,7 +475,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Page4()),
+                        MaterialPageRoute(builder: (context) => homepage()),
                       );
                     },
                     child: Padding(

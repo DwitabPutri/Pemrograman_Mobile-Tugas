@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tgs1_progmob/page1.dart';
-import 'package:tgs1_progmob/main.dart';
-import 'package:tgs1_progmob/page2.dart';
-import 'package:tgs1_progmob/page4.dart';
+import 'package:tgs1_progmob/buatAkun.dart';
+import 'package:tgs1_progmob/homepage.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,11 +9,11 @@ GetStorage _storage = GetStorage();
 
 void main() async {
   await GetStorage.init();
-  runApp(const Page3());
+  runApp(const masukAkun());
 }
 
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
+class masukAkun extends StatelessWidget {
+  const masukAkun({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _passwordController = TextEditingController();
 
   bool _emailError = false;
-  bool _passwordError = false;
+  //bool _passwordError = false;
 
   Future<void> _login() async {
     String email = _emailController.text;
@@ -206,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (_emailError)
                         Padding(
                           padding: const EdgeInsets.only(top: 7.0, left: 7.0),
-                          child: Text('Email atau nomor telepon tidak valid',
+                          child: Text('Email tidak valid',
                               style: errorMsg),
                         ),
                       SizedBox(height: 120),
@@ -258,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Page4()),
+                                      builder: (context) => homepage()),
                                 );
                               });
                             } else {
@@ -337,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Page2()),
+                                      builder: (context) => buatAkun()),
                                 );
                               },
                               child: Text('Buat Akun',

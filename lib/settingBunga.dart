@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tgs1_progmob/typo.dart';
+import 'package:tgs1_progmob/homepage.dart';
 
 GetStorage _storage = GetStorage();
 
-class Page6 extends StatefulWidget {
+class settingBunga extends StatefulWidget {
   @override
-  _Page6State createState() => _Page6State();
+  _settingBungaState createState() => _settingBungaState();
 }
 
-class _Page6State extends State<Page6> {
+class _settingBungaState extends State<settingBunga> {
   List<Map<String, dynamic>> _settingsBunga = [];
   TextEditingController _persenController = TextEditingController();
   TextEditingController _isaktifController = TextEditingController();
@@ -145,7 +146,6 @@ class _Page6State extends State<Page6> {
 
   @override
   Widget build(BuildContext context) {
-    // Pisahkan bunga yang aktif dari yang tidak aktif
     List<Map<String, dynamic>> activeBunga =
         _settingsBunga.where((setting) => setting['isaktif'] == 1).toList();
     List<Map<String, dynamic>> inactiveBunga =
@@ -153,38 +153,28 @@ class _Page6State extends State<Page6> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 3.0),
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintStyle: penjelasanSearch,
-                      hintText: 'Cari pengguna, layanan, inf....',
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.search, color: Colors.grey),
-                      contentPadding: EdgeInsets.only(bottom: 19.0),
-                    ),
-                  ),
-                ),
+            GestureDetector(
+                onTap: () {
+                  _fetchSettingsBunga();
+                },
+                child: Image.asset('assets/images/refresh.png',
+                    width: 20, height: 20),
               ),
-            ),
-            SizedBox(width: 10),
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                _fetchSettingsBunga();
-              },
-            ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => homepage()),
+            );
+          },
         ),
       ),
       body: _isLoading
