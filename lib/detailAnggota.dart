@@ -215,7 +215,7 @@ class _detailPenggunaState extends State<detailPengguna> {
           };
         });
       } else {
-        print('Failed to load jenis transaksi');
+        print('Gagal mengambil data jenis transaksi');
       }
     } catch (error) {
       print('Error: $error');
@@ -241,7 +241,7 @@ class _detailPenggunaState extends State<detailPengguna> {
 
         print('Transactions: $_transactions');
       } else {
-        print('Failed to load transactions');
+        print('Gagal mengambil data transaksi');
       }
     } catch (error) {
       print('Error: $error');
@@ -281,12 +281,16 @@ class _detailPenggunaState extends State<detailPengguna> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Tambah Transaksi'),
+              title: Text('Tambah Transaksi', style: headerOne),
               content: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: 'Jenis Transaksi',
+                        labelStyle: penjelasanSearch,
+                      ),
                       value: selectedTransactionIndex,
                       items: List.generate(
                         jenistransaksi.length,
@@ -294,7 +298,7 @@ class _detailPenggunaState extends State<detailPengguna> {
                           value: index,
                           child: Text(
                             jenistransaksi[index]['trx_name'],
-                            style: TextStyle(fontSize: 16),
+                            style:penjelasanTransaksi,
                           ),
                         ),
                       ),
@@ -306,10 +310,11 @@ class _detailPenggunaState extends State<detailPengguna> {
                     ),
                     TextFormField(
                       controller: nominalController,
-                      style: TextStyle(fontSize: 16),
+                      style: penjelasanTransaksi,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Nominal',
+                        labelStyle: penjelasanTransaksi,
                       ),
                     ),
                   ],
@@ -378,7 +383,7 @@ class _detailPenggunaState extends State<detailPengguna> {
       if (response.statusCode == 200) {
         return response.data['data']['anggota'];
       } else {
-        throw Exception('Failed to load member details');
+        throw Exception('Gagal mengambil data anggota details');
       }
     } catch (error) {
       throw Exception('Error: $error');
@@ -397,7 +402,7 @@ class _detailPenggunaState extends State<detailPengguna> {
       if (response.statusCode == 200) {
         return response.data['data']['saldo'];
       } else {
-        throw Exception('Failed to load saldo');
+        throw Exception('Gagal mengambil data saldo');
       }
     } catch (error) {
       throw Exception('Error: $error');

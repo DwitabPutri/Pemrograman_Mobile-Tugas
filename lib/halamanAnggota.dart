@@ -36,16 +36,16 @@ class _AnggotaListState extends State<AnggotaList> {
         ),
       );
 
-      print('Response: ${_response.data}'); // Debugging response
+      print('Response: ${_response.data}');
 
       if (_response.statusCode == 200) {
         setState(() {
           anggotaList = _response.data['data']['anggotas'] ?? [];
         });
       } else {
-        print('Failed to load anggota');
+        print('Gagal Mengambil Data Anggota');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('Dio error: $e');
     } catch (error) {
       print('Error: $error');
@@ -70,7 +70,7 @@ class _AnggotaListState extends State<AnggotaList> {
           anggotaList.removeWhere((anggota) => anggota['id'] == anggotaId);
         });
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('Dio error: $e');
     } catch (error) {
       print('Error: $error');
@@ -192,7 +192,7 @@ class _AnggotaListState extends State<AnggotaList> {
                                                 ),
                                                 SizedBox(width: 8),
                                                 IconButton(
-                                                  onPressed: (){
+                                                  onPressed: () {
                                                     _deleteAnggota(
                                                         context, anggota['id']);
                                                   },
@@ -228,7 +228,7 @@ class _AnggotaListState extends State<AnggotaList> {
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: inactiveAnggota.length,
-                                itemBuilder: (context, index){
+                                itemBuilder: (context, index) {
                                   var anggota = inactiveAnggota[index];
                                   if (anggota != null) {
                                     return ListTile(
@@ -283,8 +283,9 @@ class _AnggotaListState extends State<AnggotaList> {
                                                 ),
                                                 SizedBox(width: 8),
                                                 IconButton(
-                                                  onPressed: () async{
-                                                    _deleteAnggota (context, anggota['id']);
+                                                  onPressed: () async {
+                                                    _deleteAnggota(
+                                                        context, anggota['id']);
                                                   },
                                                   icon: Image.asset(
                                                     'assets/images/trashbin.png',
@@ -306,6 +307,12 @@ class _AnggotaListState extends State<AnggotaList> {
                 ],
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => tambahAnggota()));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

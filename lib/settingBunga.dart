@@ -49,7 +49,7 @@ class _settingBungaState extends State<settingBunga> {
           print('Invalid data format');
         }
       } else {
-        print('Failed to load settings bunga');
+        print('Gagal mengambil data settings bunga');
       }
     } catch (error) {
       print('Error: $error');

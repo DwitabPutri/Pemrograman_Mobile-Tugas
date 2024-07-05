@@ -146,6 +146,12 @@ TextStyle penjelasanSearch = GoogleFonts.poppins(
   fontWeight: FontWeight.w500,
 );
 
+TextStyle penjelasanTransaksi = GoogleFonts.poppins(
+  color: Color.fromARGB(255, 82, 82, 82),
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+);
+
 TextStyle labelNavbar = GoogleFonts.poppins(
   color: Color(0xFF1A1A1A),
   fontSize: 10,
