@@ -152,7 +152,9 @@ class _settingBungaState extends State<settingBunga> {
         _settingsBunga.where((setting) => setting['isaktif'] == 0).toList();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(

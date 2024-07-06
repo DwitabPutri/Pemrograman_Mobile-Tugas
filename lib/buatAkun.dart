@@ -65,9 +65,89 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/images/accept.png',
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Sukses!',
+                    style: headerThree,
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      'Akunmu telah terdaftar. Login terlebih dahulu, ya!',
+                      textAlign: TextAlign.center,
+                      style: inputField,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => masukAkun()),
+          );
+        });
+      }
+
       print(response.data);
     } catch (error) {
       print('Error: $error');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/images/cross.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Gagal',
+                  style: headerThree,
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Text(
+                    'Terjadi kesalahan saat mendaftar. Silakan coba lagi.',
+                    textAlign: TextAlign.center,
+                    style: inputField,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -82,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -179,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 17),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 20.0),
                               child: TextField(
                                 controller: _emailController,
                                 style: inputField,
@@ -211,7 +293,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 9),
                           Expanded(
                             child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 20.0),
                                 child: PasswordTextField(
                                   controller: _passwordController,
                                 )),
@@ -242,7 +325,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 7),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 20.0),
                               child: TextField(
                                 controller: _confirmPasswordController,
                                 style: inputField,
@@ -311,89 +395,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (_passwordController.text.isNotEmpty &&
                                   _confirmPasswordController.text.isNotEmpty &&
                                   _usernameController.text.isNotEmpty) {
-                                try {
-                                  await _register();
-                                  _saveUserData();
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Column(
-                                          children: [
-                                            Center(
-                                              child: Image.asset(
-                                                'assets/images/accept.png',
-                                                width: 80,
-                                                height: 80,
-                                              ),
-                                            ),
-                                            SizedBox(height: 12),
-                                            Text(
-                                              'Sukses!',
-                                              style: headerThree,
-                                            ),
-                                          ],
-                                        ),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                'Akunmu telah terdaftar. Login terlebih dahulu, ya!',
-                                                textAlign: TextAlign.center,
-                                                style: inputField,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => masukAkun()),
-                                    );
-                                  });
-                                } catch (error) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Column(
-                                          children: [
-                                            Center(
-                                              child: Image.asset(
-                                                'assets/images/cross.png',
-                                                width: 80,
-                                                height: 80,
-                                              ),
-                                            ),
-                                            SizedBox(height: 12),
-                                            Text(
-                                              'Gagal',
-                                              style: headerThree,
-                                            ),
-                                          ],
-                                        ),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                'Terjadi kesalahan saat mendaftar. Silakan coba lagi.',
-                                                textAlign: TextAlign.center,
-                                                style: inputField,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
+                                await _register();
+                                _saveUserData();
                               } else {
                                 showDialog(
                                   context: context,

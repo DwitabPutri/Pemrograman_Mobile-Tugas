@@ -412,7 +412,9 @@ class _detailPenggunaState extends State<detailPengguna> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(

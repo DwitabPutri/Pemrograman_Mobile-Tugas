@@ -52,9 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(response.data);
 
       if (response.statusCode == 200) {
-        Navigator.pushNamed(context, '/home');
         _storage.write('token', response.data['data']['token']);
-      } else {
         showDialog(
           context: context,
           builder: (context) {
@@ -63,14 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Center(
                     child: Image.asset(
-                      'assets/images/cross.png',
+                      'assets/images/accept.png',
                       width: 80,
                       height: 80,
                     ),
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'Gagal',
+                    'Sukses!',
                     style: headerThree,
                   ),
                 ],
@@ -80,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Center(
                     child: Text(
-                      'Gagal masuk. Harap periksa kembali email dan password Anda.',
+                      'Terima kasih sudah kembali. Selamat menggunakan Finease!',
                       textAlign: TextAlign.center,
                       style: inputField,
                     ),
@@ -90,15 +88,60 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         );
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => homepage()),
+          );
+        });
+        //Navigator.pushNamed(context, '/home');
+        //_storage.write('token', response.data['data']['token']);
+        //untuk modal nampilin berhasil
       }
     } catch (error) {
       print('Error: $error');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/images/cross.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Gagal',
+                  style: headerThree,
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Text(
+                    'Gagal masuk. Harap periksa kembali email dan password Anda.',
+                    textAlign: TextAlign.center,
+                    style: inputField,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -204,8 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (_emailError)
                         Padding(
                           padding: const EdgeInsets.only(top: 7.0, left: 7.0),
-                          child: Text('Email tidak valid',
-                              style: errorMsg),
+                          child: Text('Email tidak valid', style: errorMsg),
                         ),
                       SizedBox(height: 120),
                       Align(
@@ -217,48 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 _emailController.text.contains('@') &&
                                 _emailController.text.contains('.')) {
                               _login();
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Column(
-                                      children: [
-                                        Center(
-                                          child: Image.asset(
-                                            'assets/images/accept.png',
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        SizedBox(height: 12),
-                                        Text(
-                                          'Sukses!',
-                                          style: headerThree,
-                                        ),
-                                      ],
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            'Terima kasih sudah kembali. Selamat menggunakan Finease!',
-                                            textAlign: TextAlign.center,
-                                            style: inputField,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                              Future.delayed(Duration(seconds: 2), () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => homepage()),
-                                );
-                              });
                             } else {
                               showDialog(
                                 context: context,

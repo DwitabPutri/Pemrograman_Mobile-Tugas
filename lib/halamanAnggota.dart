@@ -85,7 +85,9 @@ class _AnggotaListState extends State<AnggotaList> {
         anggotaList.where((anggota) => anggota['status_aktif'] == 0).toList();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(
