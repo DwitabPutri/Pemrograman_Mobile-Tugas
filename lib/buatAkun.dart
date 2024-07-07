@@ -389,12 +389,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: ElevatedButton(
                           onPressed: () async {
+                            final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                             if (_emailController.text.isNotEmpty &&
-                                _emailController.text.contains('@') &&
-                                _emailController.text.contains('.')) {
+                                emailRegex.hasMatch(_emailController.text)) {
                               if (_passwordController.text.isNotEmpty &&
                                   _confirmPasswordController.text.isNotEmpty &&
-                                  _usernameController.text.isNotEmpty) {
+                                  _usernameController.text.isNotEmpty && _agreedToTerms) {
                                 await _register();
                                 _saveUserData();
                               } else {

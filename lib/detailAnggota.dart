@@ -192,6 +192,7 @@ class _detailPenggunaState extends State<detailPengguna> {
           },
         );
       }
+      print(response.data);
     } catch (error) {
       print('Error: $error');
     }
@@ -206,6 +207,7 @@ class _detailPenggunaState extends State<detailPengguna> {
         ),
       );
 
+      print(response.data);
       if (response.statusCode == 200) {
         final jenisTransaksiList = List<Map<String, dynamic>>.from(
             response.data['data']['jenistransaksi']);
@@ -240,6 +242,7 @@ class _detailPenggunaState extends State<detailPengguna> {
         });
 
         print('Transactions: $_transactions');
+        print(response.data);
       } else {
         print('Gagal mengambil data transaksi');
       }
@@ -298,7 +301,7 @@ class _detailPenggunaState extends State<detailPengguna> {
                           value: index,
                           child: Text(
                             jenistransaksi[index]['trx_name'],
-                            style:penjelasanTransaksi,
+                            style: penjelasanTransaksi,
                           ),
                         ),
                       ),
@@ -380,6 +383,8 @@ class _detailPenggunaState extends State<detailPengguna> {
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
       );
+
+      print(response.data);
       if (response.statusCode == 200) {
         return response.data['data']['anggota'];
       } else {
@@ -399,6 +404,7 @@ class _detailPenggunaState extends State<detailPengguna> {
         ),
       );
 
+      print(response.data);
       if (response.statusCode == 200) {
         return response.data['data']['saldo'];
       } else {
@@ -487,7 +493,7 @@ class _detailPenggunaState extends State<detailPengguna> {
                             Text('Telepon: ${userData['telepon']}',
                                 style: inputField),
                             Text(
-                                'Status Aktif: ${userData['status_aktif'] == '1' ? 'Aktif' : 'Tidak Aktif'}',
+                                'Status Aktif: ${userData['status_aktif'] == 1 ? 'Aktif' : 'Tidak Aktif'}',
                                 style: inputField),
                             SizedBox(height: 16),
                             if (userData['image_url'] != null)
@@ -524,7 +530,7 @@ class _detailPenggunaState extends State<detailPengguna> {
                 } else if (snapshot.hasData) {
                   final saldo = snapshot.data!;
                   return Text(
-                    'Saldo Tabunganmu: $saldo',
+                    'Saldo Tabunganmu: Rp. $saldo',
                     style: tutup,
                   );
                 } else {

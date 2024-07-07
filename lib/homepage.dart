@@ -206,7 +206,7 @@ class Homepage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Image.asset(
-                    'assets/images/grafik.png',
+                    'assets/images/linechart.jpg',
                     width: 700,
                     height: 700,
                   ),

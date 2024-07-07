@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tgs1_progmob/homepage.dart';
+import 'package:tgs1_progmob/halamanAnggota.dart';
 import 'package:tgs1_progmob/typo.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart';
@@ -363,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => homepage()),
+                                          builder: (context) => AnggotaList()),
                                     );
                                   });
                                 } catch (error) {

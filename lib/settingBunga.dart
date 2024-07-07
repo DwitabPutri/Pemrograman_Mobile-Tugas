@@ -36,6 +36,7 @@ class _settingBungaState extends State<settingBunga> {
         ),
       );
 
+      print(response.data);
       if (response.statusCode == 200) {
         final data = response.data['data'];
         if (data != null &&
@@ -82,7 +83,7 @@ class _settingBungaState extends State<settingBunga> {
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
       );
-
+      print(response.data);
       if (response.statusCode == 200) {
         print('Setting bunga berhasil ditambahkan');
         _fetchSettingsBunga();
@@ -161,12 +162,12 @@ class _settingBungaState extends State<settingBunga> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             GestureDetector(
-                onTap: () {
-                  _fetchSettingsBunga();
-                },
-                child: Image.asset('assets/images/refresh.png',
-                    width: 20, height: 20),
-              ),
+              onTap: () {
+                _fetchSettingsBunga();
+              },
+              child: Image.asset('assets/images/refresh.png',
+                  width: 20, height: 20),
+            ),
           ],
         ),
         leading: IconButton(

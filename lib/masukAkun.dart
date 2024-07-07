@@ -254,10 +254,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: ElevatedButton(
                           onPressed: () {
+                            final emailRegex = RegExp(
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                             if (_emailController.text.isNotEmpty &&
                                 _passwordController.text.isNotEmpty &&
-                                _emailController.text.contains('@') &&
-                                _emailController.text.contains('.')) {
+                                emailRegex.hasMatch(_emailController.text)) {
                               _login();
                             } else {
                               showDialog(

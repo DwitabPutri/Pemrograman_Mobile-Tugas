@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tgs1_progmob/detailAnggota.dart';
 import 'package:tgs1_progmob/homepage.dart';
@@ -45,6 +46,7 @@ class _AnggotaListState extends State<AnggotaList> {
       } else {
         print('Gagal Mengambil Data Anggota');
       }
+      print(_response.data);
     } on DioException catch (e) {
       print('Dio error: $e');
     } catch (error) {
@@ -65,9 +67,51 @@ class _AnggotaListState extends State<AnggotaList> {
         ),
       );
 
+      print(_response.data);
       if (_response.statusCode == 200) {
         setState(() {
           anggotaList.removeWhere((anggota) => anggota['id'] == anggotaId);
+        });
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/images/accept.png',
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Sukses!',
+                    style: headerThree,
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Text(
+                      'Anggota berhasil dihapus.',
+                      textAlign: TextAlign.center,
+                      style: inputField,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AnggotaList()),
+          );
         });
       }
     } on DioException catch (e) {
@@ -163,7 +207,7 @@ class _AnggotaListState extends State<AnggotaList> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              'Status: ${anggota['status_aktif'] == 1 ? "Aktif" : "Tidak Aktif"}',
+                                              'Status Aktif: ${anggota['status_aktif'] == 1 ? 'Aktif' : 'Tidak Aktif'}',
                                               style: inputField),
                                         ],
                                       ),
@@ -311,7 +355,8 @@ class _AnggotaListState extends State<AnggotaList> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => tambahAnggota()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => tambahAnggota()));
         },
         child: Icon(Icons.add),
       ),
